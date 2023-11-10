@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import BeatLoader from 'react-spinners/BeatLoader';
 import { toast, ToastContainer } from 'react-toastify'; // Import the toast function and ToastContainer component
 import 'react-toastify/dist/ReactToastify.css'; // Import the CSS
 
 function CashierApp() {
   const [hotdog, setHotdog] = useState('');
   const [gender, setGender] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [baseSauce, setBaseSauce] = useState({
     bolognese: false,
     blackpepper: false,
@@ -60,6 +62,7 @@ function CashierApp() {
       toast.error('Please select a payment method.');
       return;
     }
+    setIsLoading(true);
     axios
       .post(
         'https://sheet.best/api/sheets/dc0d2a1c-6848-4d63-840b-5abb7024d876',
@@ -75,6 +78,7 @@ function CashierApp() {
         },
       )
       .then(response => {
+        setIsLoading(false);
         console.log(response);
         // Show a toast notification instead of an alert
         toast.success('Order has been added successfully');
@@ -100,6 +104,7 @@ function CashierApp() {
       })
       .catch(error => {
         console.error(error);
+        setIsLoading(false);
         toast.error('Something went wrong. Please try again.'); // Show an error toast
       });
   };
@@ -363,6 +368,7 @@ function CashierApp() {
           <br />
         </fieldset>
         <button
+          disabled={isLoading}
           type="submit"
           style={{
             width: '100%',
@@ -377,7 +383,11 @@ function CashierApp() {
             cursor: 'pointer', // Change cursor to pointer when hovering over the button
           }}
         >
-          Submit
+          {isLoading ? (
+            <BeatLoader color={'#ffffff'} loading={isLoading} size={10} />
+          ) : (
+            'Submit'
+          )}
         </button>
       </form>
     </div>
