@@ -15,6 +15,7 @@ function CashierApp() {
     chili: false,
     mayonnaise: false,
   });
+  const [paymentMethod, setPaymentMethod] = useState('');
 
   const handleHotdogChange = event => {
     setHotdog(event.target.value);
@@ -43,6 +44,11 @@ function CashierApp() {
       toast.error('Please select at least one sauce option.');
       return;
     }
+
+    if (!paymentMethod) {
+      toast.error('Please select a payment method.');
+      return;
+    }
     axios
       .post(
         'https://sheet.best/api/sheets/dc0d2a1c-6848-4d63-840b-5abb7024d876',
@@ -52,6 +58,7 @@ function CashierApp() {
           baseSauce: JSON.stringify(sauce),
           toppingSauce: JSON.stringify(topping),
           gender,
+          paymentMethod,
         },
       )
       .then(response => {
@@ -60,6 +67,7 @@ function CashierApp() {
         toast.success('Order has been added successfully');
         // Clear the form fields
         setHotdog('');
+        setPaymentMethod('');
         setGender('');
         setSauce({
           bolognese: false,
@@ -173,6 +181,49 @@ function CashierApp() {
             <option value="MALE">Male</option>
             <option value="FEMALE">Female</option>
           </select>
+        </fieldset>
+        <fieldset>
+          <legend>Payment Method</legend>
+          <input
+            type="radio"
+            id="cash"
+            name="paymentMethod"
+            value="cash"
+            onChange={e => setPaymentMethod(e.target.value)}
+            required
+          />
+          <label htmlFor="cash">Cash</label>
+          <br />
+          <input
+            type="radio"
+            id="qr"
+            name="paymentMethod"
+            value="qr"
+            onChange={e => setPaymentMethod(e.target.value)}
+            required
+          />
+          <label htmlFor="qr">QR</label>
+          <br />
+          <input
+            type="radio"
+            id="grab"
+            name="paymentMethod"
+            value="grab"
+            onChange={e => setPaymentMethod(e.target.value)}
+            required
+          />
+          <label htmlFor="grab">Grab</label>
+          <br />
+          <input
+            type="radio"
+            id="gojek"
+            name="paymentMethod"
+            value="gojek"
+            onChange={e => setPaymentMethod(e.target.value)}
+            required
+          />
+          <label htmlFor="gojek">Gojek</label>
+          <br />
         </fieldset>
         <button
           type="submit"
