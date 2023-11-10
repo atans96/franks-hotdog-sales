@@ -86,7 +86,11 @@ function CashierApp() {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        padding: '1rem',
+      }}
+    >
       <ToastContainer
         position="top-right"
         autoClose={5000}
