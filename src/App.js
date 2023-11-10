@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify'; // Import the toast function and ToastContainer component
+import 'react-toastify/dist/ReactToastify.css'; // Import the CSS
+
 function CashierApp() {
   const [hotdog, setHotdog] = useState('');
   const [gender, setGender] = useState('');
@@ -13,41 +16,80 @@ function CashierApp() {
     mayonnaise: false,
   });
 
-  const handleHotdogChange = (event) => {
+  const handleHotdogChange = event => {
     setHotdog(event.target.value);
   };
 
-  const handleGenderChange = (event) => {
+  const handleGenderChange = event => {
     setGender(event.target.value);
   };
 
-  const handleSauceChange = (event) => {
+  const handleSauceChange = event => {
     setSauce({ ...sauce, [event.target.value]: event.target.checked });
   };
 
-  const handleToppingChange = (event) => {
+  const handleToppingChange = event => {
     setTopping({ ...topping, [event.target.value]: event.target.checked });
   };
 
-  const submitHandler = (event) => {
-  event.preventDefault();
-    axios.post("https://sheet.best/api/sheets/dc0d2a1c-6848-4d63-840b-5abb7024d876", {
-    date: new Date().toLocaleString(),
-    type: hotdog,
-    baseSauce: JSON.stringify(sauce),
-      toppingSauce: JSON.stringify(topping),
-    gender
-  })
-  .then(response => {
-    console.log(response);
-  })
-  .catch(error => {
-    console.error(error);
-  });
-};
+  const submitHandler = event => {
+    event.preventDefault();
+    if (!hotdog) {
+      toast.error('Please select a hotdog type.');
+      return;
+    }
+
+    if (!Object.values(sauce).some(Boolean)) {
+      toast.error('Please select at least one sauce option.');
+      return;
+    }
+    axios
+      .post(
+        'https://sheet.best/api/sheets/dc0d2a1c-6848-4d63-840b-5abb7024d876',
+        {
+          date: new Date().toLocaleString(),
+          type: hotdog,
+          baseSauce: JSON.stringify(sauce),
+          toppingSauce: JSON.stringify(topping),
+          gender,
+        },
+      )
+      .then(response => {
+        console.log(response);
+        // Show a toast notification instead of an alert
+        toast.success('Order has been added successfully');
+        // Clear the form fields
+        setHotdog('');
+        setGender('');
+        setSauce({
+          bolognese: false,
+          blackpepper: false,
+        });
+        setTopping({
+          mustard: false,
+          chili: false,
+          mayonnaise: false,
+        });
+      })
+      .catch(error => {
+        console.error(error);
+        toast.error('Something went wrong. Please try again.'); // Show an error toast
+      });
+  };
 
   return (
     <div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <h1>Frank's Cashier</h1>
       <form onSubmit={submitHandler}>
         <fieldset>
@@ -132,18 +174,23 @@ function CashierApp() {
             <option value="FEMALE">Female</option>
           </select>
         </fieldset>
-        <button type="submit" style={{
-          width: "100%",
-          height: "auto",
-          marginTop: "1rem",
-          padding: '10px', // Add some padding
-          fontSize: '16px', // Set a font size
-          backgroundColor: '#007BFF', // Set a background color
-          color: 'white', // Set the text color
-          border: 'none', // Remove the border
-          borderRadius: '4px', // Add some border radius
-          cursor: 'pointer', // Change cursor to pointer when hovering over the button
-        }}>Submit</button>
+        <button
+          type="submit"
+          style={{
+            width: '100%',
+            height: 'auto',
+            marginTop: '1rem',
+            padding: '10px', // Add some padding
+            fontSize: '16px', // Set a font size
+            backgroundColor: '#007BFF', // Set a background color
+            color: 'white', // Set the text color
+            border: 'none', // Remove the border
+            borderRadius: '4px', // Add some border radius
+            cursor: 'pointer', // Change cursor to pointer when hovering over the button
+          }}
+        >
+          Submit
+        </button>
       </form>
     </div>
   );
