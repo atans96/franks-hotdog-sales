@@ -90,7 +90,7 @@ function CashierApp() {
         draggable
         pauseOnHover
       />
-      <h1>Frank's Cashier</h1>
+      <h1>Franks Hotdog Cashier</h1>
       <form onSubmit={submitHandler}>
         <fieldset>
           <legend>Hotdog Type</legend>
