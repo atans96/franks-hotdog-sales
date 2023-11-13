@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './App.css';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { toast, ToastContainer } from 'react-toastify'; // Import the toast function and ToastContainer component
 import 'react-toastify/dist/ReactToastify.css'; // Import the CSS
@@ -148,6 +149,10 @@ function CashierApp() {
         pauseOnHover
       />
       <h1>Franks Hotdog Cashier</h1>
+      <div
+        className="overlay"
+        style={{ display: isLoading ? 'block' : 'none' }}
+      />
       <form onSubmit={submitHandler}>
         <fieldset>
           <legend>Item</legend>
