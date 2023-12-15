@@ -66,7 +66,7 @@ function CashierApp() {
     setIsLoading(true);
     axios
       .post(
-        'https://sheet.best/api/sheets/dc0d2a1c-6848-4d63-840b-5abb7024d876',
+        'https://sheet.best/api/sheets/8532f2d6-a8b6-46aa-9901-b3e14f7feba3',
         {
           date: new Date().toLocaleString(),
           type: item,
@@ -76,6 +76,12 @@ function CashierApp() {
           toppingFrenchFries: JSON.stringify(toppingFrenchFries),
           gender,
           paymentMethod,
+        },
+        {
+          headers: {
+            'X-Api-Key':
+              'B#rA6q8F0GkdKWxg%JI8nuQz4_Z!PaN2tjcwM4XRpL#RtLjZvfPDAzWz$gWcS2!n',
+          },
         },
       )
       .then(response => {
@@ -165,7 +171,7 @@ function CashierApp() {
             checked={item === 'hotdog'}
           />
           <label htmlFor="hotdog">Hotdog</label>
-          <br />
+          {/* <br />
           <input
             type="radio"
             id="frenchFries"
@@ -175,9 +181,9 @@ function CashierApp() {
             checked={item === 'frenchFries'}
           />
           <label htmlFor="frenchFries">French Fries</label>
-          <br />
+          <br /> */}
         </fieldset>
-        {item === 'frenchFries' && (
+        {/* {item === 'frenchFries' && (
           <>
             <fieldset>
               <legend>Toppings</legend>
@@ -219,7 +225,7 @@ function CashierApp() {
               <br />
             </fieldset>
           </>
-        )}
+        )} */}
         {item === 'hotdog' && (
           <>
             <fieldset>
